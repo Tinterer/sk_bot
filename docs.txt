@@ -1,0 +1,63 @@
+casino.py
+    fruitslot
+        использует 3 ключа, которые обозначают номера файлов из бд. При мэтче различных номеров выпадает бонуска.
+    appleslot
+        1 вариант. пользователю нужно угадать
+        2 вариант. пользователь получает фикс коэф присовенный предметам
+
+Type -> Title -> img
+
+Types:
+    3 in row - r3
+    1 for luck - l1
+    random row - rr []
+    extended versions - exv [расширеные версии, в которых нестандартное количество изображений]
+    
+Titles:
+    fruitslot - fs          
+    appleslot - as          
+    animalslot - ans        
+    physicsslot - phs
+
+Img:
+    img_name = {Title} + number
+    size = 1920 x 1080
+
+    fs1 - green apple
+    fs2 - red apple
+    fs3 - yellow apple
+    fs4 - banana
+    fs5 - sliva
+    fs6 - 
+    fs7 - watermelon
+    fs8 - melon
+    fs9 - grusha
+    fs10 - pineapple
+
+    as1 - iphone
+    as2 - apple watch
+    as3 - ipad
+    as4 - macbook
+    as5 - imac
+    as6 - mac
+    as7 - ipod
+    as8 - airpods pro
+    as9 - old iphone
+    as10 - airpods max
+
+
+Utilits
+    check_server(guild_id) - проверяет наличие сервера в списке серверов и если его там нет, то создает для него локальную бд
+
+    get_user_info(user_id, guild_id) - получает данные о пользователе, содержащиеся в локальной бд сервера. (если его там нет - добавляет)
+    возвращает данные списком
+
+    get_server_info(giuld_id) - получает данные о сервере, содержащиеся в большой бд серверов. (если сервера нет, то добавляет)
+    возвращает данные списком
+
+    user_dump(user_id, guild_id, user_info) - отправляет данные о пользователе в локальную бд сервера
+
+    server_dump(guild_id, server_info) - отправляет данные о сервере в большую бд серверов.
+
+    kd3k(user_id, guild_id) - счетчик кд для команды, которая в даный момент отсутстует
+
