@@ -17,8 +17,11 @@ PERSONAL_INFO_DEFAULT = {
 
 MAIN_SERVER_INFO = {
     'total_counter': 0,
-    'premium_counter': 0,
-    'premium_status': 0
+    'total_balance': 0,
+    'total_wins': 0,
+    'ppremium_counter': 0,
+    'premium_status': 0,
+    'registered_users': 0
 }
 
 class Utilits:
@@ -40,7 +43,7 @@ class Utilits:
             serv = json.load(file)
         if guild_id not in serv.keys():
             shutil.copyfile('users_lobby/example.json', f'users_lobby/{name}.json')
-        Utilits.get_server_info(str(guild_id))
+        
 
     def get_user_info(user_id, guild_id):
 

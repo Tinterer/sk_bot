@@ -1,3 +1,6 @@
+
+            DOCS FOR SK_BOT
+
 casino.py
     fruitslot
         использует 3 ключа, которые обозначают номера файлов из бд. При мэтче различных номеров выпадает бонуска.
@@ -28,7 +31,7 @@ Img:
     fs3 - yellow apple
     fs4 - banana
     fs5 - sliva
-    fs6 - 
+    fs6 - mango
     fs7 - watermelon
     fs8 - melon
     fs9 - grusha
@@ -47,6 +50,27 @@ Img:
 
 
 Utilits
+
+    TEMPLATES
+
+    PERSONAL_INFO_DEFAULT
+        -balance
+        -personal_status - status in decoration
+        -personal_theme - personal decoration
+        -personal_counter - games counter
+        -total_lose - lose counter
+        -total_win - win counter
+        -premium - active/inactive
+        -3k_use - cd for slot command
+
+    MAIN_SERVER_INFO
+        -total_counter
+        -total_wins
+        -ppremium_counter
+        -premium_status
+        -registered_users
+
+
     check_server(guild_id) - проверяет наличие сервера в списке серверов и если его там нет, то создает для него локальную бд
 
     get_user_info(user_id, guild_id) - получает данные о пользователе, содержащиеся в локальной бд сервера. (если его там нет - добавляет)

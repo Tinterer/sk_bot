@@ -4,17 +4,17 @@ from PIL import Image, ImageDraw, ImageFont
 
 class Casino_Drawer():
 
-    def __init__(self, key1, key2, key3):
-        self.fruitSlot_dr(key1, key2, key3)
+    def __init__(self, user_id, title, coef, key1, key2, key3):
+        self.test_r3(user_id, type, title, key1, key2, key3, coef)
 
-    def fruitSlot_dr(key1, key2, key3, coef):
+    '''def fruitSlot_dr(key1, key2, key3, coef):
 
         with open('types.json', 'r', encoding = 'utf-8') as file:
             frslData = json.load(file)
         
-        img1 = Image.open(frslData['fruit_slot'][f'{key1}'])
-        img2 = Image.open(frslData['fruit_slot'][f'{key2}']) 
-        img3 = Image.open(frslData['fruit_slot'][f'{key3}'])
+        img1 = Image.open(frslData['fs'][f'{key1}'])
+        img2 = Image.open(frslData['fs'][f'{key2}']) 
+        img3 = Image.open(frslData['fs'][f'{key3}'])
 
         background = Image.open('frames/fr_sl.png')
         maxsize = (350, 350)
@@ -27,12 +27,12 @@ class Casino_Drawer():
         background.paste(img3, (int(217.5 * 3 + 350 * 2) - 50, 400), mask=img3.convert('RGBA'))
 
         im = ImageDraw.Draw(background)
-        font = ImageFont.truetype('Ramona-Bold.ttf' ,70)
+        font = ImageFont.truetype('fonts/Ramona-Bold.ttf' ,70)
         im.text((int(217.5 * 3 + 350 * 2) - 200, 875), str(coef), fill=(145, 222, 207), font = font)
 
 
 
-        background.save('back.png')
+        background.save('back.png')'''
 
     def test_r3(user_id, type, title, key1, key2, key3, coef):
 
@@ -54,11 +54,10 @@ class Casino_Drawer():
         background.paste(img3, (int(217.5 * 3 + 350 * 2) - 50, 400), mask=img3.convert('RGBA'))
 
         im = ImageDraw.Draw(background)
-        font = ImageFont.truetype('Ramona-Bold.ttf' ,70)
+        font = ImageFont.truetype('fonts/Ramona-Bold.ttf' ,70)
         im.text((int(217.5 * 3 + 350 * 2) - 200, 875), str(coef), fill=(145, 222, 207), font = font)
         
 
         background.save(f'{user_id}.png')
 
 
-Casino_Drawer.fruitSlot_dr(1, 2, 3, 3)
