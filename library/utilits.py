@@ -2,8 +2,6 @@ import datetime
 import shutil
 import json
 
-from archive import registered_servers
-
 PERSONAL_INFO_DEFAULT = {
     'balance': 50,
     'personal_status': '',

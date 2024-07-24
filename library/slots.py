@@ -1,5 +1,5 @@
 import random
-from casino import Casino_Drawer
+from library.casino import Casino_Drawer
 
 class Slot():
 

@@ -2,10 +2,10 @@ import discord
 import json
 import os
 
-from utilits import Utilits
-from slots import Slot
-from casino import Casino_Drawer
-from buffering import Bufferisation
+from library.utilits import Utilits
+from library.slots import Slot
+from library.casino import Casino_Drawer
+from library.buffering import Bufferisation
 from dotenv import load_dotenv
 
 intents = discord.Intents().all()

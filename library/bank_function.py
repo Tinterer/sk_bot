@@ -1,6 +1,6 @@
 import json
 
-from utilits import Utilits
+from library.utilits import Utilits
 
 PERSONAL_INFO_DEFAULT = {
     'balance': 0,
