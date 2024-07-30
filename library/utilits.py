@@ -3,7 +3,7 @@ import shutil
 import json
 
 PERSONAL_INFO_DEFAULT = {
-    'balance': 50,
+    'balance': 5000,
     'personal_status': '',
     'personal_theme': 'dark',
     'personal_counter': 0,
@@ -15,7 +15,7 @@ PERSONAL_INFO_DEFAULT = {
 
 MAIN_SERVER_INFO = {
     'total_counter': 0,
-    'total_balance': 0,
+    'total_balance': 100000,
     'total_wins': 0,
     'ppremium_counter': 0,
     'premium_status': 0,
@@ -76,6 +76,15 @@ class Utilits:
             json.dump(servers_info, file_info)
 
         return servers_info[guild_id]
+    
+    def get_count(guild_id):
+
+        name = 's' + str(guild_id)
+        
+        with open(f'users_lobby/{name}.json', 'r', encoding = 'utf-8') as file_info:
+            s_info = json.load(file_info)
+
+        return len(s_info.keys())
     
     def user_dump(user_id, guild_id, user_info):
 

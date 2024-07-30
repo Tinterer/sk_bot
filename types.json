@@ -2,16 +2,16 @@
     
     "r3": {
         "fs": {
-            "1": "fs1.png", 
-            "2": "fs2.png",
-            "3": "fs3.png",
-            "4": "fs4.png",
-            "5": "fs5.png",
-            "6": "fs6.png",
-            "7": "fs7.png",
-            "8": "fs8.png",
-            "9": "fs9.png",
-            "10": "fs10.png"
+            "1": "types/r3/fs/fs1.png", 
+            "2": "types/r3/fs/fs2.png",
+            "3": "types/r3/fs/fs3.png",
+            "4": "types/r3/fs/fs4.png",
+            "5": "types/r3/fs/fs5.png",
+            "6": "types/r3/fs/fs6.png",
+            "7": "types/r3/fs/fs7.png",
+            "8": "types/r3/fs/fs8.png",
+            "9": "types/r3/fs/fs9.png",
+            "10": "types/r3/fs/fs10.png"
         }
     },
     "l1": {

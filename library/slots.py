@@ -16,14 +16,12 @@ class Slot():
 
         return k
     
-    def fruit_slot(user_id):
-        #1 - зеленое яблоко 2 - красное яблоко 3 желтое яблоко
-        #4 - банан 5 - слива 6 - персик 7 арбуз 8 - дыня
-        #9 - груша 10 - ананас
+    def fruit_slot(user_id, guild_id):
+
         user_id = str(user_id)
-        code1 = random.randint(1, 3)
-        code2 = random.randint(1, 3)
-        code3 = random.randint(1, 3)
+        code1 = random.randint(1, 10)
+        code2 = random.randint(1, 10)
+        code3 = random.randint(1, 10)
 
         if code1 == code2 == code3: #мегамэтч
             k = code1 + code2 + code3
@@ -32,16 +30,16 @@ class Slot():
         elif code1 == 7 and code2 == 8 and code3 == 10:
             k = 7 * 8 / 10
         elif (code1 + code2 + code3) % 2 == 1:
-            k = max(code1, code2, code3) / 100  * code2 * code3
+            k = max(code1, code2, code3) / (100  * code2 * code3)
         elif (code1 + code2 + code3) % 2 == 0:
-            k = max(code1, code2, code3) / 10 * (code2 + code3)
-        else:
+            k = max(code1, code2, code3) / (10 * (code2 + code3))
 
+        else:
             k = code1 / 10 * code2
 
         q = [code1, code2, code3, k]
 
-        Casino_Drawer.test_r3(user_id, 'r3', 'fs', code1, code2, code3, k)
+        Casino_Drawer.test_r3(user_id, guild_id, 'r3', 'fs', code1, code2, code3, k)
 
         return q
     

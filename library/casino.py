@@ -1,6 +1,7 @@
 import json
 
 from PIL import Image, ImageDraw, ImageFont
+from library.utilits import Utilits
 
 class Casino_Drawer():
 
@@ -34,10 +35,12 @@ class Casino_Drawer():
 
         background.save('back.png')'''
 
-    def test_r3(user_id, type, title, key1, key2, key3, coef):
+    def test_r3(user_id, guild_id, type, title, key1, key2, key3, coef):
 
         with open('types.json', 'r', encoding = 'utf-8') as file:
             data = json.load(file)
+
+        userData = Utilits.get_user_info(user_id, guild_id)
 
         img1 = Image.open(data[f'{type}'][f'{title}'][f'{key1}'])
         img2 = Image.open(data[f'{type}'][f'{title}'][f'{key2}'])
@@ -55,9 +58,9 @@ class Casino_Drawer():
 
         im = ImageDraw.Draw(background)
         font = ImageFont.truetype('fonts/Ramona-Bold.ttf' ,70)
-        im.text((int(217.5 * 3 + 350 * 2) - 200, 875), str(coef), fill=(145, 222, 207), font = font)
+        im.text((int(217.5 * 3 + 350 * 2) - 200, 875), str(round(coef, 2)), fill=(145, 222, 207), font = font)
         
 
-        background.save(f'{user_id}.png')
+        background.save(f"sources/{user_id}_{userData['personal_counter']}.png")
 
 
