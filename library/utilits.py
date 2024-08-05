@@ -10,8 +10,31 @@ PERSONAL_INFO_DEFAULT = {
     'total_lose': 0,
     'total_win': 0,
     'premium': 0,
-    '3k_use': 0
-}
+    'actual_job': 'Безработный', 
+    'work_sessions': 0,
+    'exp': 0,
+    'jobs': 0,
+    'j_counter': {
+        'yellow': {
+            'дворник': 0,
+            'Рабочий': 0,
+            'Бригадир': 0,
+            'Зам': 0,
+            'Директор': 0,
+            'Таксист': 0,
+            'Менеджер': 0,
+            'Руководитель': 0,
+            'Владелец': 0
+        }
+    },
+    'unique_texts': 0,
+    'walks_counter': 0,
+    'kds': {
+        'work': 0,
+        'walk': 0,
+        'trip': 0
+    }
+    }
 
 MAIN_SERVER_INFO = {
     'total_counter': 0,
@@ -19,7 +42,8 @@ MAIN_SERVER_INFO = {
     'total_wins': 0,
     'ppremium_counter': 0,
     'premium_status': 0,
-    'registered_users': 0
+    'registered_users': 0,
+    'workers_counter': 0
 }
 
 class Utilits:
@@ -39,8 +63,9 @@ class Utilits:
         name = 's' + str(guild_id)
         with open ('servers.json', 'r', encoding = 'utf-8') as file:
             serv = json.load(file)
-        if guild_id not in serv.keys():
+        if str(guild_id )not in serv.keys():
             shutil.copyfile('users_lobby/example.json', f'users_lobby/{name}.json')
+            shutil.copyfile('users_lobby/example.json', f'logs/{name}.json')
         
 
     def get_user_info(user_id, guild_id):
@@ -58,6 +83,9 @@ class Utilits:
 
         with open(f'users_lobby/s{guild_id}.json', 'w') as file_info:
             json.dump(users_info, file_info)
+
+        with open(f'users_lobby/s{guild_id}.json', 'r', encoding='utf-8') as file_info:
+            users_info = json.load(file_info)
         
         return users_info[user_id]
     

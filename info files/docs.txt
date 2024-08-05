@@ -37,16 +37,16 @@ Img:
     fs9 - grusha
     fs10 - pineapple
 
-    as1 - iphone
-    as2 - apple watch
-    as3 - ipad
-    as4 - macbook
-    as5 - imac
-    as6 - mac
-    as7 - ipod
-    as8 - airpods pro
-    as9 - old iphone
-    as10 - airpods max
+    as1 - iphone       1.5x
+    as2 - apple watch  0.5x
+    as3 - ipad         1.75x
+    as4 - macbook      3x
+    as5 - imac         5x
+    as6 - mac          0.25x
+    as7 - ipod         0x
+    as8 - airpods pro  1.25x
+    as9 - old iphone   8x
+    as10 - airpods max 2x
 
 
 Utilits
@@ -85,3 +85,5 @@ Utilits
 
     kd3k(user_id, guild_id) - счетчик кд для команды, которая в даный момент отсутстует
 
+
+get_job

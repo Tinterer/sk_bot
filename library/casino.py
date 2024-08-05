@@ -59,8 +59,7 @@ class Casino_Drawer():
         im = ImageDraw.Draw(background)
         font = ImageFont.truetype('fonts/Ramona-Bold.ttf' ,70)
         im.text((int(217.5 * 3 + 350 * 2) - 200, 875), str(round(coef, 2)), fill=(145, 222, 207), font = font)
-        
 
-        background.save(f"sources/{user_id}_{userData['personal_counter']}.png")
+        background.save(f"sources/{user_id}.png")
 
 

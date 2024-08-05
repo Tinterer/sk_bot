@@ -17,15 +17,23 @@ intents.members = True
 load_dotenv()
 bot = discord.Bot(intents = intents)
 
+bot.load_extension('cogs.brmld')
+bot.load_extension('cogs.eco')
+
 admin = bot.get_user(825422631704068166)
+
+@bot.slash_command(name = 'info', description = 'What is it?')
+async def info(ctx):
+    info = discord.Embed(title = '**Добро пожаловать!!**', description = '  Мtz.eco - это бот, ')
 
 @bot.slash_command(name = 'server_info', description = 'Get some information about server')
 async def server_info(ctx):
 
     data = Utilits.get_server_info(ctx.author.guild.id)
+
+    print(data)
     admin = bot.get_user(825422631704068166)
     helper = bot.get_user(402184234430758914)
-    guild = bot.get_guild(ctx.author.guild.id)
 
     if data:
         def check(n):
@@ -55,60 +63,8 @@ async def server_info(ctx):
         await admin.send(f'Обнаружена ошибка в работе команды `server_info`!\nGuild_id: {ctx.author.guild.id}\nGuild_name:{ctx.author.guild.name}\nUser_mention: {ctx.author.mention}')
         await helper.send(f'Обнаружена ошибка в работе команды `server_info`!\nGuild_id: {ctx.author.guild.id}\nGuild_name:{ctx.author.guild.name}\nUser_mention: {ctx.author.mention}')
 
-@bot.slash_command(name = 'fruitty_slotty', description = "Let's get some benefit from fruits!!")
-async def fruit_slot(ctx, value: int):
 
-    userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
-    serverData = Utilits.get_server_info(ctx.author.guild.id)
-    usBalance = round(userData['balance'], 2)
-    svBalance = round(serverData['total_balance'], 2)
 
-    if usBalance > value:
-
-        q = Slot.fruit_slot(ctx.author.id, ctx.author.guild.id)
-        k = q[3]
-
-        if svBalance >= value * k:
-
-            userData['balance'] = userData['balance'] - value + (value * k)
-            file = discord.File(f"sources/{ctx.author.id}_{userData['personal_counter']}.png", filename = 'image.png')
-            userData['personal_counter'] += 1
-            tp = ''
-            tc = 0
-
-            if k >= 1:
-                tp = 'Выигрыш'
-                tc = 1
-                serverData['total_balance'] -= (value * k)
-            else:
-                tp = 'Проигрыш'
-                tc = 0
-
-            userData['total_lose'] += int(tc == 0)
-            userData['total_win'] += int(tc != 0)
-            #serverData['total_balance'] -= (value * k)
-            Utilits.user_dump(ctx.author.id, ctx.author.guild.id, userData)
-            Utilits.server_dump(ctx.author.guild.id, serverData)
-
-            res = discord.Embed(title = 'Фруктовый слот')
-            res.add_field(name = 'Ставка', value = f'{value}', inline = True)
-            res.add_field(name = 'Коэффициент', value = f'{round(k, 2)}x',inline = True)
-            res.add_field(name = f'{tp}', value = f'{round(abs(value - value * k), 2)}')
-            res.set_image(url = 'attachment://image.png')
-
-            await ctx.respond(file = file, embed = res)
-
-        else:
-
-            errw01 = discord.Embed(title = 'Возникла ошибка', description = 'Код ошибки w01. Ошибка локальная, не связанная с работой бота, обратитесь к администрации вашего сервера или понизьте ставку.')
-
-            await ctx.respond(embed = errw01)
-
-    else: 
-
-        errw00 = discord.Embed(title = 'Возникла ошибка', description = 'Код ошибки w00. На вашем счете недостаточно средств для совершения операции')
-
-        await ctx.respond(embed = errw00)
 
 @bot.slash_command(name = 'top_up', description = "top up your balance if you're chosen one")
 @commands.has_permissions(administrator = True)
@@ -128,13 +84,22 @@ async def top_up(ctx, amount: int):
 
     await ctx.respond(embed = top_up)
 
-@bot.slash_command(name = 'balance', description = 'Do you wanna watch your balance?')
-async def balance(ctx):
+@bot.slash_command(name = 'balance')
+async def bbalance(ctx, user: discord.Member = None):
 
-    userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
-    balce = discord.Embed(title = f'**Баланс {ctx.author.name}**', description = f">  **Валюта:**\n**`       {userData['balance']}       `**")
-    balce.set_thumbnail(url = f'{ctx.author.avatar.url}')
+    if user:
+
+        userData = Utilits.get_user_info(user.id, ctx.guild.id)
+        balce = discord.Embed(title = f'**Баланс {user.name}**', description = f">  **Валюта:**\n**`       {userData['balance']}       `**")
+        balce.set_thumbnail(url = f'{user.avatar.url}')
+
+    else:
+
+        userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
+        balce = discord.Embed(title = f'**Баланс {ctx.author.name}**', description = f">  **Валюта:**\n**`       {userData['balance']}       `**")
+        balce.set_thumbnail(url = f'{ctx.author.avatar.url}')
 
     await ctx.respond(embed = balce)
+    
 
 bot.run(os.getenv('token'))
