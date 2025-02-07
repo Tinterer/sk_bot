@@ -1,7 +1,12 @@
 import discord
 import json
+import time
+import datetime
+import random
 
 from discord.ext import commands
+from discord import Option
+from discord.commands import OptionChoice
 from library.utilits import Utilits
 from discord.ui import Select, View
 from library.buffering import Bufferisation
@@ -13,8 +18,8 @@ class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    '''@commands.slash_command(name = 'job_info', description = 'Перестань уже сидеть на шее у родителей')
-    async def job_info(self, ctx):
+    @commands.slash_command(name = 'что', description = 'Перестань уже сидеть на шее у родителей')
+    async def what(self, ctx):
 
         userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
         serverData = Utilits.get_server_info(ctx.author.guild.id)
@@ -24,7 +29,7 @@ class Economy(commands.Cog):
         info.add_field(name = 'Количество рабочих сессий', value = f"{userData['work_sessions']}", inline = True)
         info.add_field(name = 'Всего было работ', value = f"{userData['jobs']}", inline = True)
 
-        await ctx.respond(embed = info)'''
+        await ctx.respond(embed = info)
 
     #доп доход
 
@@ -149,10 +154,10 @@ class Economy(commands.Cog):
             if job_menu.values[0] == 'Желтая':
 
                 yellow = Select(placeholder = 'Выберите работу', options = [
-                    discord.SelectOption(label = 'Дворник', description = ''),
-                    discord.SelectOption(label = 'Рабочий по благоустройству территории', description = ''),
-                    discord.SelectOption(label = 'Таксист', description = ''),
-                    discord.SelectOption(label = 'Бригадир уборщиков', description = ''),
+                    discord.SelectOption(label = 'Дворник', description = 'Подметайте улицу и получайте небольшую зарплату'),
+                    discord.SelectOption(label = 'Рабочий по благоустройству территории', description = 'Возможно придется красить заборы, но денег уже побольше'),
+                    discord.SelectOption(label = 'Таксист', description = 'Для души работа'),
+                    discord.SelectOption(label = 'Бригадир уборщиков', description = 'Вам придется руководить'),
                     discord.SelectOption(label = 'Менеджер таксистов', description = ''),
                     discord.SelectOption(label = 'Зам директора ЖКХ', description = ''),
                     discord.SelectOption(label = 'Руководитель таксопарка', description = ''),
@@ -187,14 +192,122 @@ class Economy(commands.Cog):
         await ctx.respond(view = lines_view, ephemeral = True)
 
     @commands.slash_command(name = 'work', description = 'Надо зарабатывать деньги')
-    async def work(ctx):
+    async def work(self, ctx):
+
+        userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
+        serverData = Utilits.get_server_info(ctx.author.guild.id)
+        unix_time = datetime.datetime.timestamp(datetime.datetime.now())
+
+        with open('jobs_base.json', 'r', encoding = 'utf-8') as file:
+            data = json.load(file)
+
+        with open('jobs.json', 'r', encoding = 'utf-8') as file:
+            j_data = json.load(file)
+
+        if unix_time - userData['kds']['work'] >= 0:
+
+            if userData['actual_job'] == 'Безработный':
+
+                rk = data['Безработный'][f'1'] #потом тут будет рандомное число
+
+                userData['balance'] += rk['Доплата']
+                userData['work_sessions'] += 1
+                userData['exp'] += 0.1
+                userData['kds']['work'] = unix_time
+                serverData['total_balance'] -= rk['Доплата']
+
+                Utilits.user_dump(ctx.author.id, ctx.author.guild.id, userData)
+                Utilits.server_dump(ctx.author.guild.id, serverData)
+
+                jobem = discord.Embed(title = 'Могла бы быть работа, но вы безработный', description = f"{rk['Описание']}")
+
+                await ctx.respond(embed = jobem)
+
+            else:
+
+                rk = data['yellow'][f"{userData['actual_job']}"][f"{random.randint(1, 5)}"]
+
+                userData['balance'] = userData['balance'] + j_data['yellow'][f"{userData['actual_job']}"]['Зарплата'] + rk['Доплата']
+                userData['work_sessions'] += 1
+                userData['exp'] += 0.5
+                userData['j_counter']['yellow'][f"{userData['actual_job']}"] += 1
+                userData['kds']['work'] = unix_time
+                serverData['total_balance'] = serverData['total_balance'] - (j_data['yellow'][f"{userData['actual_job']}"]['Зарплата'] + rk['Доплата'])
+                Utilits.user_dump(ctx.author.id, ctx.author.guild.id, userData)
+                Utilits.server_dump(ctx.author.guild.id, serverData)
+                s = 'actual_job'
+
+                jobem = discord.Embed(title = 'Работа', description = f"{rk['Описание']} {j_data['yellow'][f'{userData[s]}']['Зарплата'] + rk['Доплата']}")
+
+                await ctx.respond(embed = jobem)
+
+        else:
+
+            err = discord.Embed(title = 'Не надо так много работать', description = 'Отдохните еще немного и попробуйте через некоторое время.')
+
+            await ctx.respond(embed = err)
+
+    values = [
+        OptionChoice(name = "Желтая ветка", value = 'yellow'),
+        OptionChoice(name = 'Оранжевая ветка', value = 'orange'),
+        OptionChoice(name = 'Зеленая ветка', value = 'green')
+    ]
+    @commands.slash_command(name = 'upgrade', description = 'Что насчет повышения?')
+    async def upgrade(self, ctx, line: Option(str, 'На какой ветке вы хотите прокачаться?', choices = values)):
 
         userData = Utilits.get_user_info(ctx.author.id, ctx.author.guild.id)
         serverData = Utilits.get_server_info(ctx.author.guild.id)
 
-        job = userData['actual_job']
+        with open('jobs.json', 'r', encoding = 'utf-8') as file:
+            jobData = json.load(file)
 
-        jobem = discord.Embed(title = 'Работа', description = '')
+        with open('jobs_rate.json', 'r', encoding = 'utf-8') as file:
+            rateData = json.load(file)
+
+        actual_job = userData['actual_job'] #name of actual job
+        next_jobID = jobData[line][actual_job]['rate'] + 1
+        next_job = rateData[line][f"{next_jobID}"] #name of next job
+        jobdata = jobData[line][next_job]
+
+        if jobData[line][actual_job]['letter'] == jobData[line][next_job]['letter']:
+
+            sessions = userData['j_counter'][line][actual_job]
+            needed = jobData[line][actual_job]['Переход']
+
+            if sessions >= (needed // 4):
+
+                q = jobData[line][next_job]['Extra']
+                p = 1 - round(sessions / needed, 1)
+                S = q * (10 - 10 * p)
+
+                if userData['balance'] >= S:
+
+                    userData['balance'] -= S
+                    userData['actual_job'] = next_job
+                    userData['jobs'] += 1
+                    serverData['total_balance'] += S
+
+                    Utilits.user_dump(ctx.author.id, ctx.author.guild.id, userData)
+                    Utilits.server_dump(ctx.author.guild.id, serverData)
+
+                    upgrjob = discord.Embed(title = 'Вы повышены!', description = f"Вы теперь можете с гордостью хвастаться, что вас повысили на работе и теперь вы {next_job}")
+                    upgrjob.add_field(name = 'Стоимость перехода', value = S, inline = True).add_field(name = 'Предыдущая работа', value = actual_job, inline = True)
+
+                    await ctx.respond(embed = upgrjob)
+
+                else:
+
+                    err = discord.Embed(title = 'Ошибка', description = 'Вам не хватило денег, поработайте еще.')
+
+            else:
+
+                err = discord.Embed(title = 'Ошибка', description = 'Вы слишком мало поработали на вашей предыдущей работе.')
+
+        else:
+            err = discord.Embed(title = 'Возникла ошибка', description = 'Попробуйте написать команду еще раз, если не получится, то обратитесь в поддержку. Вы можете написать письмо на почту `matzzz.help@gmail.com`.')
+            await ctx.respond(embed = err)
+        await ctx.respond('Что-то пошло не так')
+
 
 
 def setup(bot):
